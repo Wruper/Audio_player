@@ -16,8 +16,6 @@ namespace Audio_player
 
         private MediaPlayer audioPlayer = new MediaPlayer();
 
-        private bool audioPlayerIsPlaying = false;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -29,12 +27,13 @@ namespace Audio_player
             openFileDialog.Filter = "Media files (*.mp3;*.mpg;*.mpeg;*.mp4)|*.mp3;*.mpg;*.mpeg;*.mp4|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
                 audioPlayer.Open(new Uri(openFileDialog.FileName));
-        }
+            songName.Text = openFileDialog.SafeFileName;
+                audioPlayer.Play();
+        }   
 
         private void bttnPlay_Click(object sender, RoutedEventArgs e)
         {
             audioPlayer.Play();
-            audioPlayerIsPlaying = true;
         }
 
 

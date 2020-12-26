@@ -40,11 +40,11 @@
             </Button>
             <Separator />
            
-            <Button Width="85">
+            <Button Width="85" Click="bttnPlay_Click">
                 <Image Source="/Images/control_play_blue.png" />
             </Button>
 
-            <Button Width="85">
+            <Button Width="85" Click="bttnPause_Click">
                 <Image Source="/Images/control_pause_blue.png" />
             </Button>
             
