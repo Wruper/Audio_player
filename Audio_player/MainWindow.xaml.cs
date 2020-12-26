@@ -22,6 +22,7 @@ namespace Audio_player
         private bool volumeSliderIsUsed = false;
         private bool reverseTime = false;
         private bool isOpened = false;
+        private bool isReplayOn = false;
 
 
         public MainWindow()
@@ -58,10 +59,37 @@ namespace Audio_player
             audioPlayer.Pause();
         }
 
-        private void bttn_Click(object sender, RoutedEventArgs e)
+
+        private void bttn_Stop(object sender, RoutedEventArgs e)
         {
-            audioPlayer.Pause();
+            audioPlayer.Stop();
         }
+
+        private void bttn_replay(object sender, RoutedEventArgs e)
+        {
+
+
+            switch (isReplayOn)
+            {
+                case false:
+                    isReplayOn = true;
+                    repeat.Background = Brushes.Black;
+                    audioPlayer.MediaEnded += new EventHandler(Media_Ended); // Adds the new event to MediaEnded.
+                    break;
+
+                case true:
+                    isReplayOn = false;
+                    repeat.Background = Brushes.LightGray;
+                    break;
+            }
+        }
+
+        private void Media_Ended(object sender, EventArgs e) // Created a new event of what happens when the song ends.
+        {
+            audioPlayer.Position = TimeSpan.Zero;
+            audioPlayer.Play();
+        }
+
 
 
         /* Audio Seeker */
