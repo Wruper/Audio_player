@@ -24,6 +24,9 @@ namespace Audio_player
         private bool isOpened = false;
         private bool isReplayOn = false;
 
+        /// <summary>
+        ///  uztaisit array prieks playlist u dig?
+        /// </summary>
 
         public MainWindow()
         {
@@ -80,6 +83,7 @@ namespace Audio_player
                 case true:
                     isReplayOn = false;
                     repeat.Background = Brushes.LightGray;
+                    audioPlayer.MediaEnded -= new EventHandler(Media_Ended); // Removes the new event to MediaEnded so that the song isn't repeated.
                     break;
             }
         }
