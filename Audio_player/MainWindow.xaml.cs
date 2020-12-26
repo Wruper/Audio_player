@@ -18,11 +18,9 @@ namespace Audio_player
 
         private MediaPlayer audioPlayer = new MediaPlayer();
         String currentSong;
-        private bool mediaPlayerIsPlaying = false;
         private bool userIsDraggingSlider = false;
         private bool reverseTime = false;
         private bool isOpened = false;
-        private bool isPausedByClick = false;
 
 
         public MainWindow()
@@ -58,7 +56,13 @@ namespace Audio_player
             audioPlayer.Pause();
         }
 
-        /* Navigation bar */
+        private void bttn_Click(object sender, RoutedEventArgs e)
+        {
+            audioPlayer.Pause();
+        }
+
+
+        /* Seeker */
         private void timer_Tick(object sender, EventArgs e)
         {
             if ((isOpened == true) && (audioPlayer.NaturalDuration.HasTimeSpan) && (!userIsDraggingSlider))
@@ -88,18 +92,9 @@ namespace Audio_player
             }
         }
 
-
         private void sliderProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             timeUpdate();
-        }
-
-
-        private void currentTime_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            reverseTime = !reverseTime;
-            timeUpdate();
-
         }
 
         private void sliderProgress_DragCompleted(object sender, DragCompletedEventArgs e)
@@ -111,6 +106,13 @@ namespace Audio_player
         private void sliderProgress_DragStarted(object sender, DragStartedEventArgs e)
         {
             userIsDraggingSlider = true;
+        }
+
+        private void currentTime_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            reverseTime = !reverseTime;
+            timeUpdate();
+
         }
 
 

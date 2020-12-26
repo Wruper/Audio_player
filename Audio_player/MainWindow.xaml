@@ -93,10 +93,19 @@
 
 
             <StatusBarItem Grid.Column="1" HorizontalContentAlignment="Stretch" Margin="3.4,0,-0.4,0.4">
-                <Slider Name="sliderProgress" Thumb.DragStarted="sliderProgress_DragStarted"  Thumb.DragCompleted="sliderProgress_DragCompleted" ValueChanged="sliderProgress_ValueChanged" Margin="35,0,0,0"/>
+                <Slider Name="sliderProgress" Thumb.DragStarted="sliderProgress_DragStarted"  Thumb.DragCompleted="sliderProgress_DragCompleted" ValueChanged="sliderProgress_ValueChanged" Margin="10,0,4,0"/>
             </StatusBarItem>
+            
             <StatusBarItem Grid.Column="2">
-                <ProgressBar Name="volume" Width="50" Height="12" Maximum="1" />
+                <Rectangle Width="25" Height="25" Margin="0,0,100,0">
+                    <Rectangle.Fill>
+                        <ImageBrush ImageSource="/Images/volume.png"/>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </StatusBarItem>
+
+            <StatusBarItem Grid.Column="3" Margin="30,0,0,0" HorizontalContentAlignment="Stretch">
+                <Slider ></Slider>
             </StatusBarItem>
         </StatusBar>
 
