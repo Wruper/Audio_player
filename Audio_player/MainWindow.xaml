@@ -8,16 +8,85 @@
         Title="MainWindow" Height="500" Width="600">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="5" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="400" />
+            <RowDefinition Height="5" />
             <RowDefinition Height="25" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
-        <ToolBar Grid.Row="2">
-            <Button>
-                
-            </Button>
-        </ToolBar>
+
+        <StackPanel Grid.Row="0" Background="LightGray">
+            <TextBlock TextAlignment="Center" FontFamily="Century Gothic" >
+                Now playing:
+            </TextBlock>
+
+            <TextBlock x:Name="songName" TextAlignment="Center" FontSize="18" FontWeight="Black" FontFamily="Century Gothic">
+                No song.
+            </TextBlock>
+        </StackPanel>
+
+        <DockPanel Grid.Row="1" Background="Black"/>
         
+        
+        
+        <DockPanel Grid.Row="3" Background="Black"/>
+
+        <DockPanel Grid.Row="4"  Background="LightGray" >
+            <Button Width="85">
+                <Image Source="/Images/folder.png" />
+            </Button>
+            <Separator />
+           
+            <Button Width="85">
+                <Image Source="/Images/control_play_blue.png" />
+            </Button>
+
+            <Button Width="85">
+                <Image Source="/Images/control_pause_blue.png" />
+            </Button>
+            
+            <Button Width="85">
+                <Image Source="/Images/control_stop_blue.png"  />
+            </Button>
+            
+            <Button Width="85">
+                <Image Source="/Images/arrow_left.png" />
+            </Button>
+            
+            <Button Width="85">
+                <Image Source="/Images/arrow_right.png" />
+            </Button>
+
+            <Button Width="85">
+                <Image Source="/Images/refresh.png" />
+            </Button>
+
+        </DockPanel>
+
+
+        <StatusBar Grid.Row="5" Background="LightGray">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem>
+                <TextBlock Name="lblProgressStatus" >00:00:00</TextBlock>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="1" HorizontalContentAlignment="Stretch">
+                <Slider Name="sliderProgress"/>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="2">
+                <ProgressBar Name="pbVolume" Width="50" Height="12" Maximum="1" Value="{Binding ElementName=mePlayer, Path=Volume}" />
+            </StatusBarItem>
+        </StatusBar>
+
     </Grid>
 </Window>
