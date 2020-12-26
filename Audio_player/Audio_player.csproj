@@ -94,5 +94,16 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\arrow_left.png" />
+    <Resource Include="Images\arrow_right.png" />
+    <Resource Include="Images\cancel.png" />
+    <Resource Include="Images\control_pause_blue.png" />
+    <Resource Include="Images\control_play_blue.png" />
+    <Resource Include="Images\control_stop_blue.png" />
+    <Resource Include="Images\folder.png" />
+    <Resource Include="Images\refresh.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
