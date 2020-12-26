@@ -94,7 +94,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\icon_picture.ico" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\arrow_left.png" />
     <Resource Include="Images\arrow_right.png" />

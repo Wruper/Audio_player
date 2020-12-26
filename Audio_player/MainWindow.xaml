@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Audio_player"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="600">
+        Title="Audio Player 3000" Height="500" Width="600"
+        Icon="/Images/icon_picture.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
@@ -33,8 +34,9 @@
         <DockPanel Grid.Row="3" Background="Black"/>
 
         <DockPanel Grid.Row="4"  Background="LightGray" >
-            <Button Width="85">
+            <Button Width="85" Click="bttnFolder_Click">
                 <Image Source="/Images/folder.png" />
+                
             </Button>
             <Separator />
            
