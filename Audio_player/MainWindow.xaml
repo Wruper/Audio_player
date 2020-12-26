@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Audio_player"
         mc:Ignorable="d"
         Title="Audio Player 3000" Height="500" Width="600"
+        ResizeMode="CanMinimize"
         Icon="/Images/icon_picture.ico">
     <Grid>
         <Grid.RowDefinitions>
@@ -105,7 +106,8 @@
             </StatusBarItem>
 
             <StatusBarItem Grid.Column="3" Margin="30,0,0,0" HorizontalContentAlignment="Stretch">
-                <Slider ></Slider>
+                <Slider x:Name="volumeSlider" Thumb.DragStarted="volumeSliderProgress_DragStarted"  Thumb.DragCompleted="volumeSliderProgress_DragCompleted" ValueChanged="volumeSliderProgress_ValueChanged" />
+                
             </StatusBarItem>
         </StatusBar>
 

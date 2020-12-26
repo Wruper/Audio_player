@@ -19,6 +19,7 @@ namespace Audio_player
         private MediaPlayer audioPlayer = new MediaPlayer();
         String currentSong;
         private bool userIsDraggingSlider = false;
+        private bool volumeSliderIsUsed = false;
         private bool reverseTime = false;
         private bool isOpened = false;
 
@@ -42,6 +43,7 @@ namespace Audio_player
                 isOpened = true;
                 currentSong = openFileDialog.SafeFileName;
                 songName.Text = currentSong.Substring(0,currentSong.Length - 4); // Removes the '.mp3' from song name.
+                volumeSettings();
                 audioPlayer.Play();
         }   
 
@@ -62,7 +64,7 @@ namespace Audio_player
         }
 
 
-        /* Seeker */
+        /* Audio Seeker */
         private void timer_Tick(object sender, EventArgs e)
         {
             if ((isOpened == true) && (audioPlayer.NaturalDuration.HasTimeSpan) && (!userIsDraggingSlider))
@@ -115,7 +117,33 @@ namespace Audio_player
 
         }
 
+        /* Volume Seeker */
 
+        private void volumeSettings()
+        {
+
+            audioPlayer.Volume = 0.5;
+            volumeSlider.Minimum = 0;
+            volumeSlider.Maximum = 1;
+            volumeSlider.Value = 0.5;
+
+        }
+
+        private void volumeSliderProgress_DragCompleted(object sender, DragCompletedEventArgs e)
+        {
+            userIsDraggingSlider = false;
+            audioPlayer.Volume = volumeSlider.Value;
+        }
+
+        private void volumeSliderProgress_DragStarted(object sender, DragStartedEventArgs e)
+        {
+            userIsDraggingSlider = true;
+        }
+
+        private void volumeSliderProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            audioPlayer.Volume = volumeSlider.Value;
+        }
 
     }
 }
