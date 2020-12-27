@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
@@ -18,6 +19,7 @@ namespace Audio_player
 
         private MediaPlayer audioPlayer = new MediaPlayer();
         String currentSong;
+        string path = Path.Combine(Environment.CurrentDirectory, @"Songs");
         private bool userIsDraggingSlider = false;
         private bool volumeSliderIsUsed = false;
         private bool reverseTime = false;
@@ -41,6 +43,7 @@ namespace Audio_player
         private void bttnFolder_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = path;
             openFileDialog.Filter = "Media files (*.mp3;*.mpg;*.mpeg;*.mp4)|*.mp3;*.mpg;*.mpeg;*.mp4|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
                 audioPlayer.Open(new Uri(openFileDialog.FileName));
