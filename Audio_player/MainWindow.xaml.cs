@@ -7,6 +7,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.Xml;
 
 namespace Audio_player
 {
@@ -20,15 +21,13 @@ namespace Audio_player
         private MediaPlayer audioPlayer = new MediaPlayer();
         String currentSong;
         string path = Path.Combine(Environment.CurrentDirectory, @"Songs");
+   
+
         private bool userIsDraggingSlider = false;
         private bool volumeSliderIsUsed = false;
         private bool reverseTime = false;
         private bool isOpened = false;
         private bool isReplayOn = false;
-
-        /// <summary>
-        ///  uztaisit array prieks playlist u dig?
-        /// </summary>
 
         public MainWindow()
         {
@@ -37,6 +36,7 @@ namespace Audio_player
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += timer_Tick;
             timer.Start();
+            addToPlaylist();
         }
         /* Buttons */
 
@@ -52,6 +52,7 @@ namespace Audio_player
                 songName.Text = currentSong.Substring(0,currentSong.Length - 4); // Removes the '.mp3' from song name.
                 volumeSettings();
                 audioPlayer.Play();
+            
         }   
 
         private void bttnPlay_Click(object sender, RoutedEventArgs e)
@@ -178,6 +179,28 @@ namespace Audio_player
         private void volumeSliderProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             audioPlayer.Volume = volumeSlider.Value;
+        }
+
+
+        /* Playlist */
+
+        private void addToPlaylist() // Searches for song names in a specific folder and adds them to the xml file.
+        {
+            XmlDocument playlist = new XmlDocument();
+            playlist.Load("Playlist.xml");
+            DirectoryInfo directory = new DirectoryInfo(path);//Selects the Song folder
+            FileInfo[] Files = directory.GetFiles("*.mp3"); // Searches only for .mp3 files
+
+            foreach (FileInfo file in Files)
+            {
+                XmlNode newNode = playlist.CreateNode(XmlNodeType.Element, "Songs", "");
+                newNode.InnerText = file.Name;
+                Console.WriteLine(file.Name);
+                playlist.DocumentElement.AppendChild(newNode);
+                playlist.Save("Playlist.xml");
+            }
+            
+
         }
 
     }
