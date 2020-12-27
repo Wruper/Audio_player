@@ -1,13 +1,14 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace Audio_player
 {
@@ -37,6 +38,7 @@ namespace Audio_player
             timer.Tick += timer_Tick;
             timer.Start();
             addToPlaylist();
+          
         }
         /* Buttons */
 
@@ -50,7 +52,7 @@ namespace Audio_player
                 isOpened = true;
                 currentSong = openFileDialog.SafeFileName;
                 songName.Text = currentSong.Substring(0,currentSong.Length - 4); // Removes the '.mp3' from song name.
-                volumeSettings();
+            volumeSettings();
                 audioPlayer.Play();
             
         }   
@@ -186,6 +188,8 @@ namespace Audio_player
 
         private void addToPlaylist() // Searches for song names in a specific folder and adds them to the xml file.
         {
+            clearPlaylist(); // Clears the existing Playlist.xml so that the songs don't repeat themselves if the app is already used before.
+            int id = 1; // Starting ID
             XmlDocument playlist = new XmlDocument();
             playlist.Load("Playlist.xml");
             DirectoryInfo directory = new DirectoryInfo(path);//Selects the Song folder
@@ -193,15 +197,44 @@ namespace Audio_player
 
             foreach (FileInfo file in Files)
             {
-                XmlNode newNode = playlist.CreateNode(XmlNodeType.Element, "Songs", "");
-                newNode.InnerText = file.Name;
-                Console.WriteLine(file.Name);
+                XmlNode newNode = playlist.CreateNode(XmlNodeType.Element, "Song", "");
+                XmlAttribute Title = playlist.CreateAttribute("Title");
+                XmlAttribute ID = playlist.CreateAttribute("ID");
+
+                Title.InnerText = file.Name;
+                ID.InnerText = id.ToString();
+
+                newNode.Attributes.Append(Title);
+                newNode.Attributes.Append(ID);
+
                 playlist.DocumentElement.AppendChild(newNode);
-                playlist.Save("Playlist.xml");
+                id += 1;
             }
+            playlist.Save("Playlist.xml");
+        }
+
+        private void clearPlaylist() 
+        {
             
+            XDocument xdoc = XDocument.Load("Playlist.xml"); // Opens the playlist xml
+
+            /* In this section in order to delete all songs in the playlist the file directory
+           is used to go gather the song names in which these names are later used to delete them from
+           XML file using their names.*/
+            DirectoryInfo directory = new DirectoryInfo(path);//Selects the Song folder
+            FileInfo[] Files = directory.GetFiles("*.mp3"); // Searches only for .mp3 files
+/
+
+            foreach (FileInfo file in Files)
+            {
+                xdoc.Element("Playlist").Elements("Song").Where(x => (string)x.Attribute("Title") == file.Name)
+                 .Remove();
+            }         
+            xdoc.Save("Playlist.xml");
 
         }
+
+
 
     }
 }
