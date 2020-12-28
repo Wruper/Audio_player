@@ -54,7 +54,7 @@
                 <Image Source="/Images/control_stop_blue.png"  />
             </Button>
 
-            <Button Width="75" Name="previousSong">
+            <Button Width="75" Name="previousSong" Click="bttn_previousSong">
                 <Image Source="/Images/arrow_left.png" />
             </Button>
 

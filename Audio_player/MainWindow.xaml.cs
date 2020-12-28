@@ -23,6 +23,7 @@ namespace Audio_player
         private MediaPlayer audioPlayer = new MediaPlayer();
         OpenFileDialog openFileDialog = new OpenFileDialog();
         String currentSong;
+        int currentSongID;
         string path = Path.Combine(Environment.CurrentDirectory, @"Songs");
    
 
@@ -110,11 +111,8 @@ namespace Audio_player
         private void bttn_nextSong(object sender, RoutedEventArgs e)
         {
             string nextSongName = "";
-            
             int count = XDocument.Load("Playlist.xml").XPathSelectElements("//Song").Count(); // to find how many songs are in the playlist
-           
-            int currentSongID = Int32.Parse(findCurrentSongID()); // to keep track of the songs that will be after this one
-
+            currentSongID = Int32.Parse(findCurrentSongID()); // to keep track of the songs that will be after this one
             if (currentSongID > count) // since the ID count surpases the playlist count, there are no more songs to play.
             {
                 audioPlayer.Stop();
@@ -126,9 +124,14 @@ namespace Audio_player
             Console.WriteLine(path + "\\" + nextSongName);
             audioPlayer.Play();
             currentSong = nextSongName;
-                if (currentSong == null) // catch when the playlist has run out of songs
+                if (currentSong == null || currentSongID == count) // catch when the playlist has run out of songs
                 {
                     audioPlayer.Stop();
+                    currentSongID = count;// to prevent the songId from going out of bounds, so that when the end point has been reached
+                                          // the user can listen to a previous song.
+                    currentSong = songName.Text;
+                    Console.WriteLine(currentSongID);
+                    Console.WriteLine(currentSong);
                 }
                 else
                 {
@@ -136,16 +139,40 @@ namespace Audio_player
                 }
                 currentSongID += 1;
             }
-
-            
-
         }
 
         private void bttn_previousSong(object sender, RoutedEventArgs e)
         {
-
-
+            string previousSongName = "";
+            int count = XDocument.Load("Playlist.xml").XPathSelectElements("//Song").Count(); // to find how many songs are in the playlist
+            currentSongID = Int32.Parse(findCurrentSongID()); // to keep track of the songs that will be after this one
+            if (currentSongID == 0) // if the currentSongID is equal to 0, then the player can't go back
+            {
+                audioPlayer.Stop();
+            }
+            else
+            {
+                previousSongName = findPreviousSongByID(findCurrentSongID());
+                audioPlayer.Open(new Uri(path + "\\" + previousSongName, UriKind.Relative));
+                Console.WriteLine(path + "\\" + previousSongName);
+                audioPlayer.Play();
+                currentSong = previousSongName;
+                if (currentSong == null) // catch when the playlist has run out of songs
+                {
+                    audioPlayer.Stop();
+                    currentSongID = 1; // to prevent the songId from being null, so that when the end point has been reached
+                                       // the user can listen to a next song.
+                                       
+                }
+                else
+                {
+                    songName.Text = previousSongName.Substring(0, currentSong.Length - 4);
+                }
+                currentSongID -= 1;
+            }
         }
+
+    
 
 
         /* Media Ended Events */
@@ -161,7 +188,6 @@ namespace Audio_player
         private void mediaEndedNextSong(object sender, EventArgs e) // New event, that plays next song when song ends.
         {
             XDocument doc = XDocument.Load("Playlist.xml");
-            int count = doc.Elements("Song").Count();
             string nextSongName = "";
 
             if (!isReplayOn)
@@ -341,6 +367,23 @@ namespace Audio_player
             // In order to check for the next song, we have to increase the id by one
             // but first we have to parse it to an int and then back to string
             int nextSongId = Int32.Parse(id) + 1;
+            string nextSongIdUnparsed = nextSongId.ToString();
+
+
+            // Returns the current played songs ID
+            string nextSongName = xdoc.Element("Playlist").Elements("Song").Where(x => (string)x.Attribute("ID") == nextSongIdUnparsed)
+                 .Select(y => (string)y.Attribute("Title").Value).FirstOrDefault();
+
+            return nextSongName;
+        }
+
+        private string findPreviousSongByID(string id)
+        {
+            XDocument xdoc = XDocument.Load("Playlist.xml");
+
+            // In order to check for the previous song, we have to deincrease the id by one
+            // but first we have to parse it to an int and then back to string
+            int nextSongId = Int32.Parse(id) - 1;
             string nextSongIdUnparsed = nextSongId.ToString();
 
 
