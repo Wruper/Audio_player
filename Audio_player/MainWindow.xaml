@@ -36,34 +36,38 @@
 
         <DockPanel Grid.Row="4"  Background="LightGray" >
             
-            <Button Width="85"  Name="folder" Click="bttnFolder_Click">
+            <Button Width="75"  Name="folder" Click="bttnFolder_Click">
                 <Image Source="/Images/folder.png" />
                 
             </Button>
             <Separator />
 
-            <Button Width="85" Name="play" Click="bttnPlay_Click">
+            <Button Width="75" Name="play" Click="bttnPlay_Click">
                 <Image Source="/Images/control_play_blue.png" />
             </Button>
 
-            <Button Width="85" Name="pause" Click="bttnPause_Click">
+            <Button Width="75" Name="pause" Click="bttnPause_Click">
                 <Image Source="/Images/control_pause_blue.png" />
             </Button>
 
-            <Button Width="85" Name="stop" Click="bttn_Stop">
+            <Button Width="75" Name="stop" Click="bttn_Stop">
                 <Image Source="/Images/control_stop_blue.png"  />
             </Button>
 
-            <Button Width="85" Name="lastTrack">
+            <Button Width="75" Name="lastTrack">
                 <Image Source="/Images/arrow_left.png" />
             </Button>
 
-            <Button Width="85" Name="nextTrack">
+            <Button Width="75" Name="nextTrack">
                 <Image Source="/Images/arrow_right.png" />
             </Button>
 
-            <Button Width="85" Name="repeat" Click="bttn_replay">
+            <Button Width="75" Name="repeat" Click="bttn_replay">
                 <Image Source="/Images/refresh.png" />
+            </Button>
+
+            <Button Width="75" Name="shuffle" Click="bttn_shuffle">
+                <Image Source="/Images/shuffle.png" />
             </Button>
 
         </DockPanel>

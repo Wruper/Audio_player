@@ -20,15 +20,17 @@ namespace Audio_player
     {
 
         private MediaPlayer audioPlayer = new MediaPlayer();
+        OpenFileDialog openFileDialog = new OpenFileDialog();
         String currentSong;
         string path = Path.Combine(Environment.CurrentDirectory, @"Songs");
    
 
         private bool userIsDraggingSlider = false;
-        private bool volumeSliderIsUsed = false;
+      
         private bool reverseTime = false;
         private bool isOpened = false;
         private bool isReplayOn = false;
+        private bool isShuffleOn = false;
 
         public MainWindow()
         {
@@ -38,13 +40,14 @@ namespace Audio_player
             timer.Tick += timer_Tick;
             timer.Start();
             addToPlaylist();
+
           
         }
         /* Buttons */
 
         private void bttnFolder_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+
             openFileDialog.InitialDirectory = path;
             openFileDialog.Filter = "Media files (*.mp3;*.mpg;*.mpeg;*.mp4)|*.mp3;*.mpg;*.mpeg;*.mp4|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
@@ -54,7 +57,9 @@ namespace Audio_player
                 songName.Text = currentSong.Substring(0,currentSong.Length - 4); // Removes the '.mp3' from song name.
             volumeSettings();
                 audioPlayer.Play();
-            
+
+
+
         }   
 
         private void bttnPlay_Click(object sender, RoutedEventArgs e)
@@ -77,27 +82,61 @@ namespace Audio_player
         private void bttn_replay(object sender, RoutedEventArgs e)
         {
 
-
             switch (isReplayOn)
             {
                 case false:
                     isReplayOn = true;
                     repeat.Background = Brushes.Black;
-                    audioPlayer.MediaEnded += new EventHandler(Media_Ended); // Adds the new event to MediaEnded.
+                    audioPlayer.MediaEnded += new EventHandler(mediaEndedReplaySong); // Adds the new event to MediaEnded.
                     break;
 
                 case true:
                     isReplayOn = false;
                     repeat.Background = Brushes.LightGray;
-                    audioPlayer.MediaEnded -= new EventHandler(Media_Ended); // Removes the new event to MediaEnded so that the song isn't repeated.
+                    audioPlayer.MediaEnded -= new EventHandler(mediaEndedReplaySong); // Removes the new event to MediaEnded so that the song isn't repeated.
                     break;
             }
         }
 
-        private void Media_Ended(object sender, EventArgs e) // Created a new event of what happens when the song ends.
+        private void bttn_shuffle(object sender, RoutedEventArgs e)
+        {
+         
+           audioPlayer.MediaEnded += new EventHandler(mediaEndedNextSong);
+            isShuffleOn = true;
+            shuffle.Background = Brushes.Black;
+            
+        }
+
+
+
+        /* Media Ended Events */
+
+        private void mediaEndedReplaySong(object sender, EventArgs e) // New event, that replays current song.
         {
             audioPlayer.Position = TimeSpan.Zero;
             audioPlayer.Play();
+        }
+
+        private void mediaEndedNextSong(object sender, EventArgs e) // New event, that plays next song when song ends.
+        {
+            int id = Int32.Parse(findCurrentSongID());
+            XDocument doc = XDocument.Load("Playlist.xml");
+            int count = doc.Elements("Song").Count();
+
+            string nextSongName = findNextSongByID(findCurrentSongID());
+            string firstSongInPlaylist = findNextSongByID(1.ToString());
+
+            if(id != count)
+            {
+                audioPlayer.Stop();
+                audioPlayer.Open(new Uri(path + "\\" + nextSongName, UriKind.Relative)); // sito padomat
+                audioPlayer.Play();
+                songName.Text = nextSongName.Substring(0, currentSong.Length - 4);
+
+            }
+
+
+
         }
 
 
@@ -188,7 +227,7 @@ namespace Audio_player
 
         private void addToPlaylist() // Searches for song names in a specific folder and adds them to the xml file.
         {
-            clearPlaylist(); // Clears the existing Playlist.xml so that the songs don't repeat themselves if the app is already used before.
+            clearPlaylist(); // Clears the existing Playlist.xml so that the songs, that were previously in the playlist don't get added again.
             int id = 1; // Starting ID
             XmlDocument playlist = new XmlDocument();
             playlist.Load("Playlist.xml");
@@ -220,10 +259,10 @@ namespace Audio_player
 
             /* In this section in order to delete all songs in the playlist the file directory
            is used to go gather the song names in which these names are later used to delete them from
-           XML file using their names.*/
+           XML file.*/
             DirectoryInfo directory = new DirectoryInfo(path);//Selects the Song folder
             FileInfo[] Files = directory.GetFiles("*.mp3"); // Searches only for .mp3 files
-/
+
 
             foreach (FileInfo file in Files)
             {
@@ -234,7 +273,31 @@ namespace Audio_player
 
         }
 
+        private string findCurrentSongID()
+        {
+            XDocument xdoc = XDocument.Load("Playlist.xml");
+            // Returns the current played songs ID
+            string currentSongID = xdoc.Element("Playlist").Elements("Song").Where(x => (string)x.Attribute("Title") == currentSong)
+                 .Select(y => (string)y.Attribute("ID").Value).FirstOrDefault();
+
+            return currentSongID;
+        }
+
+        private string findNextSongByID(string id)
+        {
+            XDocument xdoc = XDocument.Load("Playlist.xml");
+
+            // In order to check for the next song, we have to increase the id by one
+            // but first we have to parse it to an int and then back to string
+            int nextSongId = Int32.Parse(id) + 1;
+            string nextSongIdUnparsed = nextSongId.ToString();
 
 
+            // Returns the current played songs ID
+            string nextSongName = xdoc.Element("Playlist").Elements("Song").Where(x => (string)x.Attribute("ID") == nextSongIdUnparsed)
+                 .Select(y => (string)y.Attribute("Title").Value).FirstOrDefault();
+
+            return nextSongName;
+        }
     }
 }
