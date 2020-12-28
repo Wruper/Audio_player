@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using System.Xml;
 using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace Audio_player
 {
@@ -106,6 +107,46 @@ namespace Audio_player
             
         }
 
+        private void bttn_nextSong(object sender, RoutedEventArgs e)
+        {
+            string nextSongName = "";
+            
+            int count = XDocument.Load("Playlist.xml").XPathSelectElements("//Song").Count(); // to find how many songs are in the playlist
+           
+            int currentSongID = Int32.Parse(findCurrentSongID()); // to keep track of the songs that will be after this one
+
+            if (currentSongID > count) // since the ID count surpases the playlist count, there are no more songs to play.
+            {
+                audioPlayer.Stop();
+            }
+            else
+            {
+            nextSongName = findNextSongByID(findCurrentSongID());
+            audioPlayer.Open(new Uri(path + "\\" + nextSongName, UriKind.Relative));
+            Console.WriteLine(path + "\\" + nextSongName);
+            audioPlayer.Play();
+            currentSong = nextSongName;
+                if (currentSong == null) // catch when the playlist has run out of songs
+                {
+                    audioPlayer.Stop();
+                }
+                else
+                {
+                    songName.Text = nextSongName.Substring(0, currentSong.Length - 4);
+                }
+                currentSongID += 1;
+            }
+
+            
+
+        }
+
+        private void bttn_previousSong(object sender, RoutedEventArgs e)
+        {
+
+
+        }
+
 
         /* Media Ended Events */
 
@@ -127,9 +168,7 @@ namespace Audio_player
             {
             nextSongName = findNextSongByID(findCurrentSongID());
             Console.WriteLine(nextSongName);
-            audioPlayer.Stop();
-            audioPlayer.Open(new Uri(path + "\\" + nextSongName, UriKind.Relative)); // sito padomat
-            Console.WriteLine(path + "\\" + nextSongName);
+            audioPlayer.Open(new Uri(path + "\\" + nextSongName, UriKind.Relative));
             audioPlayer.Play();
             currentSong = nextSongName;
                 if(currentSong == null) // catch when the playlist has run out of songs
