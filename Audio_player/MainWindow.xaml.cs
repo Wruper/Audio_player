@@ -30,6 +30,7 @@ namespace Audio_player
         private bool reverseTime = false;
         private bool isOpened = false;
         private bool isReplayOn = false;
+        private bool isContinueOn = false;
         private bool isShuffleOn = false;
 
         public MainWindow()
@@ -40,8 +41,9 @@ namespace Audio_player
             timer.Tick += timer_Tick;
             timer.Start();
             addToPlaylist();
+            audioPlayer.MediaEnded += new EventHandler(mediaEndedNextSong);
 
-          
+
         }
         /* Buttons */
 
@@ -100,16 +102,14 @@ namespace Audio_player
 
         private void bttn_shuffle(object sender, RoutedEventArgs e)
         {
-         
-           audioPlayer.MediaEnded += new EventHandler(mediaEndedNextSong);
-            isShuffleOn = true;
-            shuffle.Background = Brushes.Black;
+ 
             
         }
 
 
-
         /* Media Ended Events */
+
+
 
         private void mediaEndedReplaySong(object sender, EventArgs e) // New event, that replays current song.
         {
@@ -119,25 +119,37 @@ namespace Audio_player
 
         private void mediaEndedNextSong(object sender, EventArgs e) // New event, that plays next song when song ends.
         {
-            int id = Int32.Parse(findCurrentSongID());
             XDocument doc = XDocument.Load("Playlist.xml");
             int count = doc.Elements("Song").Count();
+            string nextSongName = "";
 
-            string nextSongName = findNextSongByID(findCurrentSongID());
-            string firstSongInPlaylist = findNextSongByID(1.ToString());
-
-            if(id != count)
+            if (!isReplayOn)
             {
-                audioPlayer.Stop();
-                audioPlayer.Open(new Uri(path + "\\" + nextSongName, UriKind.Relative)); // sito padomat
-                audioPlayer.Play();
-                songName.Text = nextSongName.Substring(0, currentSong.Length - 4);
-
+            nextSongName = findNextSongByID(findCurrentSongID());
+            Console.WriteLine(nextSongName);
+            audioPlayer.Stop();
+            audioPlayer.Open(new Uri(path + "\\" + nextSongName, UriKind.Relative)); // sito padomat
+            Console.WriteLine(path + "\\" + nextSongName);
+            audioPlayer.Play();
+            currentSong = nextSongName;
+                if(currentSong == null) // catch when the playlist has run out of songs
+                {
+                    audioPlayer.Stop();
+                }
+                else
+                {
+                    songName.Text = nextSongName.Substring(0, currentSong.Length - 4);
+                }
             }
-
-
-
+            else
+            {   // if isReplyOn = true, removes this EventHandler, so that this event handler and mediaEndedReplaySong
+                // don't colide with one another
+                audioPlayer.MediaEnded -= new EventHandler(mediaEndedNextSong);
+            }
+ 
         }
+
+ 
 
 
 
