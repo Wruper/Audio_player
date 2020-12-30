@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Xml;
 using System.Xml.Linq;
@@ -54,14 +53,17 @@ namespace Audio_player
         {
 
             openFileDialog.InitialDirectory = path;
-            openFileDialog.Filter = "Media files (*.mp3;*.mpg;*.mpeg;*.mp4)|*.mp3;*.mpg;*.mpeg;*.mp4|All files (*.*)|*.*";
+            openFileDialog.Filter = "Media files (*.mp3;*)|*.mp3;|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
+            {
                 audioPlayer.Open(new Uri(openFileDialog.FileName));
                 isOpened = true;
                 currentSong = openFileDialog.SafeFileName;
                 songName.Text = currentSong.Substring(0,currentSong.Length - 4); // Removes the '.mp3' from song name.
-            volumeSettings();
+                volumeSettings();
                 audioPlayer.Play();
+            }
+                
 
 
 
@@ -73,13 +75,13 @@ namespace Audio_player
             {
                 isPlayOn = false;
                 audioPlayer.Pause();
-                playAndPause.Content = FindResource("Pause");
+                playAndPause.Content = FindResource("Play");
             }
             else
             {
                 audioPlayer.Play();
                 isPlayOn = true;
-                playAndPause.Content = FindResource("Play");
+                playAndPause.Content = FindResource("Pause");
             }
         }
 
@@ -224,6 +226,17 @@ namespace Audio_player
                     currentSongID -= 1;
                 }
                 
+            }
+        }
+
+
+        private void bttn_add(object sender, RoutedEventArgs e)
+        {
+            if (openFileDialog.ShowDialog() == true)
+            {
+                openFileDialog.Filter = "Media files (*.mp3;*)|*.mp3;|All files (*.*)|*.*";
+                string selectedSong = openFileDialog.SafeFileName;
+                System.IO.Directory.Move(System.IO.Path.GetFullPath(openFileDialog.FileName), path + "\\" + selectedSong);
             }
         }
 

@@ -47,7 +47,7 @@
             <Separator />
 
             <Button Width="75" Name="playAndPause" Click="bttnPlayAndPause_Click">
-                <Image Source="/Images/control_play_blue.png" />
+                <Image Source="/Images/control_pause_blue.png" />
             </Button>
 
             <Button Width="75" Name="stop" Click="bttn_Stop">
@@ -68,6 +68,10 @@
 
             <Button Width="75" Name="shuffle" Click="bttn_shuffle">
                 <Image Source="/Images/shuffle.png" />
+            </Button>
+
+            <Button Width="75" Name="add" Click="bttn_add">
+                <Image Source="/Images/add.png" />
             </Button>
 
         </DockPanel>
