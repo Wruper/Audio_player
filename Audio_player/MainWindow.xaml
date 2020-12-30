@@ -8,6 +8,10 @@
         Title="Audio Player 3000" Height="500" Width="600"
         ResizeMode="CanMinimize"
         Icon="/Images/icon_picture.ico">
+    <Window.Resources>
+        <Image x:Key="Play" Source="/Images/control_play_blue.png"/>
+        <Image x:Key="Pause" Source="/Images/control_pause_blue.png"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
@@ -42,12 +46,8 @@
             </Button>
             <Separator />
 
-            <Button Width="75" Name="play" Click="bttnPlay_Click">
+            <Button Width="75" Name="playAndPause" Click="bttnPlayAndPause_Click">
                 <Image Source="/Images/control_play_blue.png" />
-            </Button>
-
-            <Button Width="75" Name="pause" Click="bttnPause_Click">
-                <Image Source="/Images/control_pause_blue.png" />
             </Button>
 
             <Button Width="75" Name="stop" Click="bttn_Stop">

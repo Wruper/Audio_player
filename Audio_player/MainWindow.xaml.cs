@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Xml;
 using System.Xml.Linq;
@@ -33,6 +34,7 @@ namespace Audio_player
         private bool isOpened = false;
         private bool isReplayOn = false;
         private bool isShuffleOn = false;
+        private bool isPlayOn = true; //default is true, because when a song is picked, the song is played automaticly
 
         public MainWindow()
         {
@@ -65,16 +67,22 @@ namespace Audio_player
 
         }   
 
-        private void bttnPlay_Click(object sender, RoutedEventArgs e)
+        private void bttnPlayAndPause_Click(object sender, RoutedEventArgs e)
         {
-            audioPlayer.Play();
+            if (isPlayOn)
+            {
+                isPlayOn = false;
+                audioPlayer.Pause();
+                playAndPause.Content = FindResource("Pause");
+            }
+            else
+            {
+                audioPlayer.Play();
+                isPlayOn = true;
+                playAndPause.Content = FindResource("Play");
+            }
         }
 
-
-        private void bttnPause_Click(object sender, RoutedEventArgs e)
-        {
-            audioPlayer.Pause();
-        }
 
 
         private void bttn_Stop(object sender, RoutedEventArgs e)
