@@ -32,7 +32,6 @@ namespace Audio_player
         private bool reverseTime = false;
         private bool isOpened = false;
         private bool isReplayOn = false;
-        private bool isContinueOn = false;
         private bool isShuffleOn = false;
 
         public MainWindow()
@@ -91,27 +90,68 @@ namespace Audio_player
                 case false:
                     isReplayOn = true;
                     repeat.Background = Brushes.Black;
-                    audioPlayer.MediaEnded += new EventHandler(mediaEndedReplaySong); // Adds the new event to MediaEnded.
+                    if (isShuffleOn)
+                    {
+                        audioPlayer.MediaEnded -= new EventHandler(mediaEndedShuffleSong);
+                        isShuffleOn = false; // if shuffle is on, weturn it off so that they both don't colide with one another
+                        shuffle.Background = Brushes.LightGray;
+                        audioPlayer.MediaEnded += new EventHandler(mediaEndedReplaySong);
+                    }
+                    else
+                    {
+                        audioPlayer.MediaEnded -= new EventHandler(mediaEndedNextSong);// remove the default Event
+                        audioPlayer.MediaEnded += new EventHandler(mediaEndedReplaySong); // Adds the new event to MediaEnded.
+                    }
                     break;
 
                 case true:
                     isReplayOn = false;
                     repeat.Background = Brushes.LightGray;
-                    audioPlayer.MediaEnded -= new EventHandler(mediaEndedReplaySong); // Removes the new event to MediaEnded so that the song isn't repeated.
+                    audioPlayer.MediaEnded -= new EventHandler(mediaEndedReplaySong);// Removes the new event to MediaEnded so that the song isn't repeated.
+                    audioPlayer.MediaEnded += new EventHandler(mediaEndedNextSong);// put back the default Event
                     break;
             }
         }
 
         private void bttn_shuffle(object sender, RoutedEventArgs e)
         {
- 
-            
+            switch (isShuffleOn)
+            {
+                case false:
+                    isShuffleOn = true;
+                    shuffle.Background = Brushes.Black;
+                    if (isReplayOn)
+                    {
+                        isReplayOn = false;
+                        repeat.Background = Brushes.LightGray;
+                        audioPlayer.MediaEnded -= new EventHandler(mediaEndedReplaySong); // 
+                        audioPlayer.MediaEnded += new EventHandler(mediaEndedShuffleSong);
+                    }
+                    else
+                    {
+                        audioPlayer.MediaEnded -= new EventHandler(mediaEndedNextSong); // remove the default Event
+                        audioPlayer.MediaEnded += new EventHandler(mediaEndedShuffleSong);
+                    }
+                    break;
+
+                case true:
+                    isShuffleOn = false;
+                    shuffle.Background = Brushes.LightGray;
+                    audioPlayer.MediaEnded -= new EventHandler(mediaEndedShuffleSong);
+                    audioPlayer.MediaEnded += new EventHandler(mediaEndedNextSong); // put back the default Event
+                    break;
+
+            }
+
+
+
         }
 
         private void bttn_nextSong(object sender, RoutedEventArgs e)
         {
-            string nextSongName = "";
+            string nextSongTitle = "";
             int count = XDocument.Load("Playlist.xml").XPathSelectElements("//Song").Count(); // to find how many songs are in the playlist
+            Console.WriteLine(currentSong + "aa");
             currentSongID = Int32.Parse(findCurrentSongID()); // to keep track of the songs that will be after this one
             if (currentSongID > count) // since the ID count surpases the playlist count, there are no more songs to play.
             {
@@ -119,44 +159,50 @@ namespace Audio_player
             }
             else
             {
-            nextSongName = findNextSongByID(findCurrentSongID());
-            audioPlayer.Open(new Uri(path + "\\" + nextSongName, UriKind.Relative));
-            Console.WriteLine(path + "\\" + nextSongName);
+            nextSongTitle = findNextSongByID(findCurrentSongID());
+            audioPlayer.Open(new Uri(path + "\\" + nextSongTitle, UriKind.Relative));
+            Console.WriteLine(path + "\\" + nextSongTitle);
             audioPlayer.Play();
-            currentSong = nextSongName;
+            currentSong = nextSongTitle;
                 if (currentSong == null || currentSongID == count) // catch when the playlist has run out of songs
                 {
                     audioPlayer.Stop();
                     currentSongID = count;// to prevent the songId from going out of bounds, so that when the end point has been reached
-                                          // the user can listen to a previous song.
-                    currentSong = songName.Text;
-                    Console.WriteLine(currentSongID);
-                    Console.WriteLine(currentSong);
+                                          // the user can listen to the next song.
+                    currentSong = songName.Text + ".mp3"; // so that we can use it for later searches
                 }
                 else
                 {
-                    songName.Text = nextSongName.Substring(0, currentSong.Length - 4);
+                    songName.Text = nextSongTitle.Substring(0, currentSong.Length - 4);
+                    currentSongID += 1;
                 }
-                currentSongID += 1;
+                
             }
         }
 
         private void bttn_previousSong(object sender, RoutedEventArgs e)
         {
-            string previousSongName = "";
+            string previousSongTitle = "";
             int count = XDocument.Load("Playlist.xml").XPathSelectElements("//Song").Count(); // to find how many songs are in the playlist
+            Console.WriteLine(currentSongID);
             currentSongID = Int32.Parse(findCurrentSongID()); // to keep track of the songs that will be after this one
-            if (currentSongID == 0) // if the currentSongID is equal to 0, then the player can't go back
+
+            if (currentSongID == 1) // if the currentSongID is equal to 1, then the player can't go back and we have to make sure that it stays as 1
             {
                 audioPlayer.Stop();
+                currentSongID = 1;// to prevent the songId from going out of bounds, so that when the end point has been reached
+                                      // the user can listen to a previous song.
+                currentSong = songName.Text + ".mp3"; // so that we can use it for later searches
+                Console.WriteLine(currentSong + "bbbbbbb");
+
             }
             else
             {
-                previousSongName = findPreviousSongByID(findCurrentSongID());
-                audioPlayer.Open(new Uri(path + "\\" + previousSongName, UriKind.Relative));
-                Console.WriteLine(path + "\\" + previousSongName);
+                previousSongTitle = findPreviousSongByID(findCurrentSongID());
+                audioPlayer.Open(new Uri(path + "\\" + previousSongTitle, UriKind.Relative));
+                Console.WriteLine(path + "\\" + previousSongTitle);
                 audioPlayer.Play();
-                currentSong = previousSongName;
+                currentSong = previousSongTitle;
                 if (currentSong == null) // catch when the playlist has run out of songs
                 {
                     audioPlayer.Stop();
@@ -166,9 +212,10 @@ namespace Audio_player
                 }
                 else
                 {
-                    songName.Text = previousSongName.Substring(0, currentSong.Length - 4);
+                    songName.Text = previousSongTitle.Substring(0, currentSong.Length - 4);
+                    currentSongID -= 1;
                 }
-                currentSongID -= 1;
+                
             }
         }
 
@@ -177,6 +224,16 @@ namespace Audio_player
 
         /* Media Ended Events */
 
+        private void mediaEndedShuffleSong(object sender, EventArgs e)
+        {
+            string randomSongTitle = randomSong();
+            audioPlayer.Stop();
+            audioPlayer.Open(new Uri(path + "\\" + randomSongTitle, UriKind.Relative));
+            songName.Text = randomSongTitle.Substring(0, currentSong.Length - 4);
+            currentSong = randomSongTitle;
+            audioPlayer.Play();
+
+        }
 
 
         private void mediaEndedReplaySong(object sender, EventArgs e) // New event, that replays current song.
@@ -190,8 +247,7 @@ namespace Audio_player
             XDocument doc = XDocument.Load("Playlist.xml");
             string nextSongName = "";
 
-            if (!isReplayOn)
-            {
+
             nextSongName = findNextSongByID(findCurrentSongID());
             Console.WriteLine(nextSongName);
             audioPlayer.Open(new Uri(path + "\\" + nextSongName, UriKind.Relative));
@@ -205,12 +261,7 @@ namespace Audio_player
                 {
                     songName.Text = nextSongName.Substring(0, currentSong.Length - 4);
                 }
-            }
-            else
-            {   // if isReplyOn = true, removes this EventHandler, so that this event handler and mediaEndedReplaySong
-                // don't colide with one another
-                audioPlayer.MediaEnded -= new EventHandler(mediaEndedNextSong);
-            }
+            
  
         }
 
@@ -392,6 +443,21 @@ namespace Audio_player
                  .Select(y => (string)y.Attribute("Title").Value).FirstOrDefault();
 
             return nextSongName;
+        }
+
+        private string randomSong()
+        {
+            XDocument xdoc = XDocument.Load("Playlist.xml");
+            int count = xdoc.XPathSelectElements("//Song").Count();
+            Random random = new Random();
+
+            string randomSongId = random.Next(1, count).ToString();
+
+            string nextSongName = xdoc.Element("Playlist").Elements("Song").Where(x => (string)x.Attribute("ID") == randomSongId)
+                 .Select(y => (string)y.Attribute("Title").Value).FirstOrDefault();
+
+            return nextSongName;
+
         }
     }
 }
