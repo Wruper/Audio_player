@@ -237,10 +237,35 @@ namespace Audio_player
                 openFileDialog.Filter = "Media files (*.mp3;*)|*.mp3;|All files (*.*)|*.*";
                 string selectedSong = openFileDialog.SafeFileName;
                 System.IO.Directory.Move(System.IO.Path.GetFullPath(openFileDialog.FileName), path + "\\" + selectedSong);
+                addToPlaylist();
+
             }
         }
 
-    
+        private void bttn_delete(object sender, RoutedEventArgs e)
+        {
+            if (openFileDialog.ShowDialog() == true)
+            {
+                openFileDialog.Filter = "Media files (*.mp3;*)|*.mp3;|All files (*.*)|*.*";
+                string selectedSong = openFileDialog.SafeFileName;
+                if (System.IO.File.Exists(System.IO.Path.GetFullPath(openFileDialog.FileName)))
+                {
+                    try
+                    {
+                        System.IO.File.Delete(System.IO.Path.GetFullPath(openFileDialog.FileName));
+                        addToPlaylist();
+                    }
+                    catch (System.IO.IOException ee)    // vajag parveidot
+                    {
+                        Console.WriteLine(ee.Message);
+                        return;
+                    }
+                }
+            }
+
+        }
+
+
 
 
         /* Media Ended Events */
@@ -415,8 +440,7 @@ namespace Audio_player
 
             foreach (FileInfo file in Files)
             {
-                xdoc.Element("Playlist").Elements("Song").Where(x => (string)x.Attribute("Title") == file.Name)
-                 .Remove();
+                xdoc.XPathSelectElements("//Song").Remove();
             }         
             xdoc.Save("Playlist.xml");
 

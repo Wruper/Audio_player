@@ -33,46 +33,48 @@
         </StackPanel>
 
         <DockPanel Grid.Row="1" Background="Black"/>
-        
-        
-        
+
         <DockPanel Grid.Row="3" Background="Black"/>
 
         <DockPanel Grid.Row="4"  Background="LightGray" >
             
-            <Button Width="75"  Name="folder" Click="bttnFolder_Click">
+            <Button Width="66"  Name="folder" Click="bttnFolder_Click">
                 <Image Source="/Images/folder.png" />
-                
             </Button>
-            <Separator />
 
-            <Button Width="75" Name="playAndPause" Click="bttnPlayAndPause_Click">
+            <Button Width="66" Name="add" Click="bttn_add">
+                <Image Source="/Images/add.png" />
+            </Button>
+
+            <Button Width="66" Name="delete" Click="bttn_delete">
+                <Image Source="/Images/delete.png" />
+            </Button>
+
+            <Button Width="66" Name="playAndPause" Click="bttnPlayAndPause_Click">
                 <Image Source="/Images/control_pause_blue.png" />
             </Button>
 
-            <Button Width="75" Name="stop" Click="bttn_Stop">
+            <Button Width="66" Name="stop" Click="bttn_Stop">
                 <Image Source="/Images/control_stop_blue.png"  />
             </Button>
 
-            <Button Width="75" Name="previousSong" Click="bttn_previousSong">
+            <Button Width="66" Name="previousSong" Click="bttn_previousSong">
                 <Image Source="/Images/arrow_left.png" />
             </Button>
 
-            <Button Width="75" Name="nextSong" Click="bttn_nextSong">
+            <Button Width="66" Name="nextSong" Click="bttn_nextSong">
                 <Image Source="/Images/arrow_right.png" />
             </Button>
 
-            <Button Width="75" Name="repeat" Click="bttn_replay">
+            <Button Width="66" Name="repeat" Click="bttn_replay">
                 <Image Source="/Images/refresh.png" />
             </Button>
 
-            <Button Width="75" Name="shuffle" Click="bttn_shuffle">
+            <Button Width="66" Name="shuffle" Click="bttn_shuffle">
                 <Image Source="/Images/shuffle.png" />
             </Button>
 
-            <Button Width="75" Name="add" Click="bttn_add">
-                <Image Source="/Images/add.png" />
-            </Button>
+
 
         </DockPanel>
 
