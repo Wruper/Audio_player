@@ -99,12 +99,12 @@ namespace Audio_player
             {
                 case false:
                     isReplayOn = true;
-                    repeat.Background = Brushes.Black;
+                    repeat.Background = Brushes.White;
                     if (isShuffleOn)
                     {
                         audioPlayer.MediaEnded -= new EventHandler(mediaEndedShuffleSong);
                         isShuffleOn = false; // if shuffle is on, weturn it off so that they both don't colide with one another
-                        shuffle.Background = Brushes.LightGray;
+                        shuffle.Background = Brushes.Red;
                         audioPlayer.MediaEnded += new EventHandler(mediaEndedReplaySong);
                     }
                     else
@@ -116,7 +116,7 @@ namespace Audio_player
 
                 case true:
                     isReplayOn = false;
-                    repeat.Background = Brushes.LightGray;
+                    repeat.Background = Brushes.Red;
                     audioPlayer.MediaEnded -= new EventHandler(mediaEndedReplaySong);// Removes the new event to MediaEnded so that the song isn't repeated.
                     audioPlayer.MediaEnded += new EventHandler(mediaEndedNextSong);// put back the default Event
                     break;
@@ -129,11 +129,11 @@ namespace Audio_player
             {
                 case false:
                     isShuffleOn = true;
-                    shuffle.Background = Brushes.Black;
+                    shuffle.Background = Brushes.White;
                     if (isReplayOn)
                     {
                         isReplayOn = false;
-                        repeat.Background = Brushes.LightGray;
+                        repeat.Background = Brushes.Red;
                         audioPlayer.MediaEnded -= new EventHandler(mediaEndedReplaySong); // 
                         audioPlayer.MediaEnded += new EventHandler(mediaEndedShuffleSong);
                     }
@@ -146,7 +146,7 @@ namespace Audio_player
 
                 case true:
                     isShuffleOn = false;
-                    shuffle.Background = Brushes.LightGray;
+                    shuffle.Background = Brushes.Red;
                     audioPlayer.MediaEnded -= new EventHandler(mediaEndedShuffleSong);
                     audioPlayer.MediaEnded += new EventHandler(mediaEndedNextSong); // put back the default Event
                     break;
@@ -275,7 +275,8 @@ namespace Audio_player
             string randomSongTitle = randomSong();
             audioPlayer.Stop();
             audioPlayer.Open(new Uri(path + "\\" + randomSongTitle, UriKind.Relative));
-            songName.Text = randomSongTitle.Substring(0, currentSong.Length - 4);
+            Console.WriteLine(randomSongTitle);
+            songName.Text = randomSongTitle.Substring(0, randomSongTitle.Length - 4);
             currentSong = randomSongTitle;
             audioPlayer.Play();
 
