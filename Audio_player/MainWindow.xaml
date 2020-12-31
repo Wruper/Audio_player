@@ -12,9 +12,8 @@
         <Image x:Key="Play" Source="/Images/control_play_blue.png"/>
         <Image x:Key="Pause" Source="/Images/control_pause_blue.png"/>
     </Window.Resources>
+    
     <Grid>
-
-
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="5" />
@@ -24,20 +23,9 @@
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="2" Background="Black" VerticalAlignment="Center" >
-            <TextBlock TextAlignment="Center" FontFamily="Century Gothic" Margin="0,20,0,20" Foreground="White">
-                Now playing:
-            </TextBlock>
-
-            <TextBlock x:Name="songName" TextAlignment="Center" FontSize="18" FontWeight="Black" 
-                       FontFamily="Century Gothic" Margin="0,30,0,80" Foreground="White">
-                Nothing
-            </TextBlock>
-        </StackPanel>
-
         <DockPanel Grid.Row="0"  Background="Black" >
 
-            <Button Width="50" Name="add" Click="bttn_add" Margin="100,0,0,0" Background="Red">
+            <Button Width="50" Name="addSong" Click="AddSong" Margin="100,0,0,0" Background="Red">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="20"/>
@@ -46,7 +34,7 @@
                 <Image Source="/Images/add.png" />
             </Button>
 
-            <Button Width="50"  Name="folder" Click="bttnFolder_Click" Margin="20,0,0,0" Background="Red">
+            <Button Width="50"  Name="folder" Click="SelectSong" Margin="20,0,0,0" Background="Red">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="20"/>
@@ -55,7 +43,7 @@
                 <Image Source="/Images/folder.png" />
             </Button>
 
-            <Button Width="50" Name="delete" Click="bttn_delete"  Margin="0,0,80,0" Background="Red">
+            <Button Width="50" Name="deleteSong" Click="DeleteSong"  Margin="0,0,80,0" Background="Red">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="20"/>
@@ -63,15 +51,29 @@
                 </Button.Resources>
                 <Image Source="/Images/delete.png" />
             </Button>
+            
         </DockPanel>
 
         <DockPanel Grid.Row="1" Background="Red"/>
+
+        <StackPanel Grid.Row="2" Background="Black" VerticalAlignment="Center" >
+
+            <TextBlock TextAlignment="Center" FontFamily="Century Gothic" Margin="0,20,0,20" Foreground="White">
+                Now playing:
+            </TextBlock>
+
+            <TextBlock x:Name="songName" TextAlignment="Center" FontSize="18" FontWeight="Black" 
+                       FontFamily="Century Gothic" Margin="0,30,0,80" Foreground="White">
+                Nothing
+            </TextBlock>
+
+        </StackPanel>
 
         <DockPanel Grid.Row="3" Background="Red"/>
 
         <DockPanel Grid.Row="4"  Background="Black" >
 
-            <Button Width="50" Name="repeat" Click="bttn_replay" Background="Red">
+            <Button Width="50" Name="replaySong" Click="ReplaySong" Background="Red">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="20"/>
@@ -81,7 +83,7 @@
             </Button>
 
 
-            <Button Width="50" Name="previousSong" Click="bttn_previousSong " Margin="20,0,0,0" Background="Red">
+            <Button Width="50" Name="previousSong" Click="PreviousSong" Margin="20,0,0,0" Background="Red">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="20"/>
@@ -90,9 +92,7 @@
                 <Image Source="/Images/arrow_left.png" />
             </Button>
 
-
-
-            <Button Width="50" Name="playAndPause" Click="bttnPlayAndPause_Click" Margin="20,0,0,0" Background="Red">
+            <Button Width="50" Name="playAndPause" Click="PlayOrPauseSong" Margin="20,0,0,0" Background="Red">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="20"/>
@@ -101,7 +101,7 @@
                 <Image Source="/Images/control_pause_blue.png" />
             </Button>
 
-            <Button Width="50" Name="stop" Click="bttn_Stop" Margin="20,0,0,0" Background="Red">
+            <Button Width="50" Name="stopSong" Click="StopSong" Margin="20,0,0,0" Background="Red">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="20"/>
@@ -110,8 +110,7 @@
                 <Image Source="/Images/control_stop_blue.png"  />
             </Button>
 
-
-            <Button Width="50" Name="nextSong" Click="bttn_nextSong" Margin="20,0,0,0" Background="Red">
+            <Button Width="50" Name="nextSong" Click="NextSong" Margin="20,0,0,0" Background="Red">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="20"/>
@@ -120,8 +119,7 @@
                 <Image Source="/Images/arrow_right.png" />
             </Button>
 
-
-            <Button Width="50" Name="shuffle" Click="bttn_shuffle" Margin="15,0,0,0" Background="Red">
+            <Button Width="50" Name="shuffleSong" Click="ShuffleSong" Margin="15,0,0,0" Background="Red">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="20"/>
@@ -129,11 +127,8 @@
                 </Button.Resources>
                 <Image Source="/Images/shuffle.png" />
             </Button>
-
-
-
+            
         </DockPanel>
-
 
         <StatusBar Grid.Row="5" Background="Black">
             <StatusBar.ItemsPanel>
@@ -148,7 +143,7 @@
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem HorizontalAlignment="Left"  Width="55">
-                <TextBlock Name="currentTime" MouseLeftButtonDown="currentTime_MouseLeftButtonDown" Foreground="White">
+                <TextBlock Name="currentTime" MouseLeftButtonDown="CurrentTimeMouseLeftButtonDown" Foreground="White">
                     00:00:00
                 </TextBlock>
             </StatusBarItem>
@@ -161,20 +156,16 @@
                 <TextBlock Name="lenght">00:00:00</TextBlock>
             </StatusBarItem>
 
-
             <StatusBarItem Grid.Column="1" HorizontalContentAlignment="Stretch" Margin="3.4,0,-0.4,0.4">
-                <Slider Name="sliderProgress" Thumb.DragStarted="sliderProgress_DragStarted"  
-                        Thumb.DragCompleted="sliderProgress_DragCompleted" ValueChanged="sliderProgress_ValueChanged" 
+                <Slider Name="sliderProgress" Thumb.DragStarted="SliderProgressDragStarted"  
+                        Thumb.DragCompleted="SliderProgressDragCompleted" ValueChanged="SliderProgressValueChanged" 
                         Margin="10,0,4,0">
-                    
                     <Slider.LayoutTransform>
                         <ScaleTransform CenterX="0" CenterY="0" ScaleX="1" ScaleY="0.5"/>
                     </Slider.LayoutTransform>
-                    
                 </Slider>
-               
+
             </StatusBarItem>
-            
             <StatusBarItem Grid.Column="2">
                 <Rectangle Width="25" Height="25" Margin="0,0,100,0">
                     <Rectangle.Fill>
@@ -184,17 +175,14 @@
             </StatusBarItem>
 
             <StatusBarItem Grid.Column="3" Margin="30,0,0,0" HorizontalContentAlignment="Stretch">
-                <Slider x:Name="volumeSlider" Thumb.DragStarted="volumeSliderProgress_DragStarted"  
-                        Thumb.DragCompleted="volumeSliderProgress_DragCompleted" 
-                        ValueChanged="volumeSliderProgress_ValueChanged">
-                    
+                <Slider x:Name="volumeSlider" Thumb.DragStarted="VolumeSliderProgressDragStarted"  
+                        Thumb.DragCompleted="VolumeSliderProgressDragCompleted" 
+                        ValueChanged="VolumeSliderProgressValueChanged">
                     <Slider.LayoutTransform>
                         <ScaleTransform CenterX="0" CenterY="0" ScaleX="1" ScaleY="0.5"/>
                     </Slider.LayoutTransform>
                 </Slider>
-
             </StatusBarItem>
         </StatusBar>
-
     </Grid>
 </Window>
