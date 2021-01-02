@@ -24,7 +24,6 @@
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="0"  Background="Black" >
-
             <Button Width="50" Name="addSong" Click="AddSong" Margin="100,0,0,0" Background="Red">
                 <Button.Resources>
                     <Style TargetType="Border">
@@ -51,13 +50,11 @@
                 </Button.Resources>
                 <Image Source="/Images/delete.png" />
             </Button>
-            
         </DockPanel>
 
         <DockPanel Grid.Row="1" Background="Red"/>
 
         <StackPanel Grid.Row="2" Background="Black" VerticalAlignment="Center" >
-
             <TextBlock TextAlignment="Center" FontFamily="Century Gothic" Margin="0,20,0,20" Foreground="White">
                 Now playing:
             </TextBlock>
@@ -66,13 +63,11 @@
                        FontFamily="Century Gothic" Margin="0,30,0,80" Foreground="White">
                 Nothing
             </TextBlock>
-
         </StackPanel>
 
         <DockPanel Grid.Row="3" Background="Red"/>
 
         <DockPanel Grid.Row="4"  Background="Black" >
-
             <Button Width="50" Name="replaySong" Click="ReplaySong" Background="Red">
                 <Button.Resources>
                     <Style TargetType="Border">
@@ -81,7 +76,6 @@
                 </Button.Resources>
                 <Image Source="/Images/refresh.png" />
             </Button>
-
 
             <Button Width="50" Name="previousSong" Click="PreviousSong" Margin="20,0,0,0" Background="Red">
                 <Button.Resources>
@@ -127,7 +121,6 @@
                 </Button.Resources>
                 <Image Source="/Images/shuffle.png" />
             </Button>
-            
         </DockPanel>
 
         <StatusBar Grid.Row="5" Background="Black">
@@ -142,6 +135,7 @@
                     </Grid>
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
+            
             <StatusBarItem HorizontalAlignment="Left"  Width="55">
                 <TextBlock Name="currentTime" MouseLeftButtonDown="CurrentTimeMouseLeftButtonDown" Foreground="White">
                     00:00:00
@@ -164,8 +158,8 @@
                         <ScaleTransform CenterX="0" CenterY="0" ScaleX="1" ScaleY="0.5"/>
                     </Slider.LayoutTransform>
                 </Slider>
-
             </StatusBarItem>
+            
             <StatusBarItem Grid.Column="2">
                 <Rectangle Width="25" Height="25" Margin="0,0,100,0">
                     <Rectangle.Fill>
@@ -183,6 +177,7 @@
                     </Slider.LayoutTransform>
                 </Slider>
             </StatusBarItem>
+            
         </StatusBar>
     </Grid>
 </Window>

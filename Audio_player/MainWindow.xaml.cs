@@ -19,8 +19,8 @@ namespace Audio_player
 
         private MediaPlayer audioPlayer = new MediaPlayer();
         OpenFileDialog openFileDialog = new OpenFileDialog();
-        String currentSong; //Current songs title
-        int currentSongID; // current song ID
+        String currentSong = ""; //Current songs title
+        int currentSongID = 0; // current song ID
         string path = Path.Combine(Environment.CurrentDirectory, @"Songs"); //Path for Songs folder.
    
 
@@ -91,7 +91,7 @@ namespace Audio_player
                     {
                         isShuffleOn = false; // If shuffle is on, we turn it off so that shuffle doesn't collide with replay.
                         shuffleSong.Background = Brushes.Red;
-                        audioPlayer.MediaEnded -= new EventHandler(MediaEndedShuffleSong); //Removes shuffle.
+                        audioPlayer.MediaEnded -= new EventHandler(MediaEndedShuffleSong); // Removes shuffle.
                         audioPlayer.MediaEnded += new EventHandler(MediaEndedReplaySong); // Adds replay event to MediaEnded.
                     }
                     else
