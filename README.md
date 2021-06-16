@@ -4,7 +4,8 @@ This is a small application for Windows OS, which works as an audio player.
 ## Features
 
 * The ablity so select songs from a folder.
-* Delete songs from a folder.
+* Delete songs from a playlist folder.
+* Add songs to a playlist folder.
 * The basic audio player functions: play, pause, end, next song, previous song, shuffle, repeat playlist.
 * Displayes the currently played song.
 
